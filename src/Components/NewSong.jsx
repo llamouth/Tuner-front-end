@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 const NewSong = () => {
 
-    const navigate = useNavigate()
-    const API = import.meta.env.VITE_BASE_URL
-
     const [newSong, setNewSong] = useState({
         songname: "",
         artist: "",
         is_favorite: false,
         album: ""
     })
+
+    const navigate = useNavigate()
+    const API = import.meta.env.VITE_BASE_URL
 
     const addsong = () => {
         fetch(`${API}/music`, {

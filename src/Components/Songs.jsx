@@ -7,8 +7,8 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import Song from './Song';
-
+//COMPONENTS
+import Song from './SongRow';
 
 const API = import.meta.env.VITE_BASE_URL
 

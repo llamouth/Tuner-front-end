@@ -15,15 +15,14 @@ const SongCard = () => {
 
     const [song, setSong] = useState({})
     const [showLyrics, setShowLyrics] = useState(false)
-
     const [editSong, setEditSong] = useState({
         songName: "",
         artist: "",
         is_favorite: song.is_favorite,
         album: ""
     })
-
     const [editSongDisplay, setEditSongDisplay] = useState(false)
+
     const API = import.meta.env.VITE_BASE_URL
     const { id } = useParams()
     const navigate = useNavigate()
@@ -75,6 +74,8 @@ const SongCard = () => {
         .then(res => res.json())
         .then(res => setSong(res))
         .catch(err => console.error(err))
+
+        setShowLyrics(false)
     },[editSongDisplay])
 
     useEffect(() => {
@@ -136,14 +137,13 @@ const SongCard = () => {
                                 <Button variant='outlined' onClick={handleDelete}>Delete</Button>
                                 <Button variant='outlined' onClick={() => navigate("/songs")}>Back</Button>
                             </Typography>
+                            <CardActions>
+                                <Button size="small" onClick={ () => setShowLyrics(!showLyrics)}>Lyrics</Button>
+                            </CardActions>
                         </>
                     )
                 }
-                
             </CardContent>
-            <CardActions>
-                <Button size="small" onClick={ () => setShowLyrics(!showLyrics)}>Lyrics</Button>
-            </CardActions>
 
             {showLyrics && 
                 <CardContent>
