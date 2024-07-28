@@ -11,148 +11,163 @@ import { useNavigate, useParams } from 'react-router-dom';
 // COMPONENTS
 import SongLyrics from './SongLyrics';
 
-const SongCard = () => {
+// STYLES
+import '../scss/SongCard.scss';
 
-    const [song, setSong] = useState({})
-    const [showLyrics, setShowLyrics] = useState(false)
-    const [editSong, setEditSong] = useState({
-        songName: "",
-        artist: "",
-        is_favorite: song.is_favorite,
-        album: ""
+const SongCard = ({ setShowPlaylistChoice }) => {
+  const [song, setSong] = useState({});
+  const [showLyrics, setShowLyrics] = useState(false);
+  const [editSongDisplay, setEditSongDisplay] = useState(false);
+  const [editSong, setEditSong] = useState({
+    songName: "",
+    artist: "",
+    is_favorite: song.is_favorite,
+    album: ""
+  });
+
+  const API = import.meta.env.VITE_BASE_URL;
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    fetch(`${API}/music/${id}`, {
+      method: "DELETE"
     })
-    const [editSongDisplay, setEditSongDisplay] = useState(false)
+      .then(res => res.json())
+      .then(res => navigate("/songs"))
+      .catch(err => console.error(err));
+  };
 
-    const API = import.meta.env.VITE_BASE_URL
-    const { id } = useParams()
-    const navigate = useNavigate()
+  const handleCheckBox = () => {
+    setEditSong((prevState) => {
+      return { ...prevState, is_favorite: !editSong.is_favorite };
+    });
+  };
 
-    const handleDelete = () => {
-        fetch(`${API}/music/${id}`,{
-            method: "DELETE"
-        })
-        .then(res => res.json())
-        .then(res => navigate("/songs"))
-        .catch(err => consolez.error(err))
-    }
+  const handleChange = (e) => {
+    setEditSong((prevState) => {
+      return { ...prevState, [e.target.name]: e.target.value };
+    });
+  };
 
-    const handleCheckBox = () => {
-        setEditSong((prevState) => {
-            return {...prevState, is_favorite: !editSong.is_favorite}
-        })
-    }
+  const handlePlaylistChoice = () => {
+    setShowPlaylistChoice(true)
+  }
 
-    const handleChange = (e) => {
-        setEditSong((prevState) => {
-            return {...prevState, [e.target.name]: e.target.value}
-        })
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch(`${API}/music/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(editSong),
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(res => setEditSongDisplay(!editSongDisplay))
+      .catch(err => console.error(err));
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        fetch(`${API}/music/${id}`,{
-            method: "PUT",
-            body: JSON.stringify(editSong),
-            headers: {
-                "Content-type": "application/json"
-            }
-        })
-        .then(res => res.json())
-        .then(res => setEditSongDisplay(!editSongDisplay))
-        .catch(err => console.error(err))
-    }
-    
-    useEffect(() => {
-        fetch(`${API}/music/${id}`)
-        .then(res => res.json())
-        .then(res => setSong(res))
-        .catch(err => console.error(err))
-    },[])
-    
-    useEffect(() => {
-        fetch(`${API}/music/${id}`)
-        .then(res => res.json())
-        .then(res => setSong(res))
-        .catch(err => console.error(err))
+  useEffect(() => {
+    fetch(`${API}/music/${id}`)
+      .then(res => res.json())
+      .then(res => setSong(res))
+      .catch(err => console.error(err));
+  }, []);
 
-        setShowLyrics(false)
-    },[editSongDisplay])
+  useEffect(() => {
+    fetch(`${API}/music/${id}`)
+      .then(res => res.json())
+      .then(res => setSong(res))
+      .catch(err => console.error(err));
 
-    useEffect(() => {
-        setEditSong({
-            songname: song.songname,
-            artist: song.artist,
-            is_favorite: song.is_favorite,
-            album: song.album
-        })
-    },[song])
+    setShowLyrics(false);
+  }, [editSongDisplay]);
 
-    return (
-        <Card sx={{ minWidth: 275 }}>
-            <CardContent>
-                {editSongDisplay ? 
-                    (
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group>
-                                <Form.Label>Song Name</Form.Label>
-                                <Form.Control value={editSong.songname} name='songname' onChange={handleChange}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Artist</Form.Label>
-                                <Form.Control value={editSong.artist} name='artist' onChange={handleChange}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Album</Form.Label>
-                                <Form.Control value={editSong.album} name='album' onChange={handleChange}/>
-                            </Form.Group>
+  useEffect(() => {
+    setEditSong({
+      songname: song.songname,
+      artist: song.artist,
+      is_favorite: song.is_favorite,
+      album: song.album
+    });
+  }, [song]);
 
-                            <div>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Favorite song?
-                                </Typography>
-                                <Checkbox checked={editSong.is_favorite} onClick={handleCheckBox}/>
-                            </div>
+  return (
+    <Card className="card-container">
+      <CardContent>
+        {editSongDisplay ?
+          (
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="form-group">
+                <Form.Label className="form-label">Song Name</Form.Label>
+                <Form.Control value={editSong.songname} name='songname' onChange={handleChange} className="form-control"/>
+              </Form.Group>
+              <Form.Group className="form-group">
+                <Form.Label className="form-label">Artist</Form.Label>
+                <Form.Control value={editSong.artist} name='artist' onChange={handleChange} className="form-control"/>
+              </Form.Group>
+              <Form.Group className="form-group">
+                <Form.Label className="form-label">Album</Form.Label>
+                <Form.Control value={editSong.album} name='album' onChange={handleChange} className="form-control"/>
+              </Form.Group>
 
-                            <Button variant='outlined' type='submit'>Submit</Button>
-                            <Button variant='outlined' onClick={() => setEditSongDisplay(!editSongDisplay)}>Back</Button>
-                        </Form>
-                    ) 
-                    :
-                    (
-                        <>
-                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                Song
-                            </Typography>
-                            <Typography variant="h5" component="div" name='artist'>
-                                    {song.artist}
-                            </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary" name='songname'>
-                                {song.songname}
-                            </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary" name='songname'>
-                                {song.album}
-                            </Typography>
-                            <Typography variant="body2">
-                                <Button variant='outlined' onClick={() => setEditSongDisplay(!editSongDisplay)}>Edit</Button>
-                                <Button variant='outlined' onClick={handleDelete}>Delete</Button>
-                                <Button variant='outlined' onClick={() => navigate("/songs")}>Back</Button>
-                            </Typography>
-                            <CardActions>
-                                <Button size="small" onClick={ () => setShowLyrics(!showLyrics)}>Lyrics</Button>
-                            </CardActions>
-                        </>
-                    )
-                }
-            </CardContent>
+              <div className="favorite-checkbox">
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  Favorite song?
+                </Typography>
+                <Checkbox checked={editSong.is_favorite} onClick={handleCheckBox} />
+              </div>
 
-            {showLyrics && 
-                <CardContent>
-                    <SongLyrics song={song}/>
-                </CardContent>
-            }
-            
-        </Card>
-    );
+              <div className="card-buttons">
+                <Button variant='outlined' type='submit' className="btn-outlined">Submit</Button>
+                <Button variant='outlined' onClick={() => setEditSongDisplay(!editSongDisplay)} className="btn-outlined">Back</Button>
+              </div>
+            </Form>
+          )
+          :
+          (
+            <>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className="card-header">
+                Artist
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} variant="h5" component="div" name='artist' className="card-title">
+                {song.artist}
+              </Typography>
+              <Typography sx={{ mb: 0, fontSize: 12 }} color="text.secondary" name='songname' className="card-subtitle">
+                Song Name
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} variant="h5" name='songname' className="card-album">
+                {song.songname}
+              </Typography>
+              <Typography sx={{ mb: 0, fontSize: 12 }} color="text.secondary" name='songname' className="card-subtitle">
+                Album
+              </Typography>
+              <Typography sx={{ mb: 1.5}} variant="h5"  name='album' className="card-album">
+                {song.album}
+              </Typography>
+                <div className="card-buttons">
+                  <Button variant='outlined' onClick={() => setEditSongDisplay(!editSongDisplay)} className="btn-outlined">Edit</Button>
+                  <Button variant='outlined' onClick={handleDelete} className="btn-outlined">Delete</Button>
+                  <Button variant='outlined' onClick={() => navigate("/songs")} className="btn-outlined">Back</Button>
+                  <Button variant='outlined' onClick={handlePlaylistChoice} className="btn-outlined">Add to a playlist</Button>
+                </div>
+              <CardActions className="card-actions">
+                <Button size="small" onClick={() => setShowLyrics(!showLyrics)} className="btn-outlined">Lyrics</Button>
+              </CardActions>
+            </>
+          )
+        }
+      </CardContent>
+
+      {showLyrics &&
+        <CardContent className="lyrics-section">
+          <SongLyrics song={song} />
+        </CardContent>
+      }
+
+    </Card>
+  );
 };
 
 export default SongCard;

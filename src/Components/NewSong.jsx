@@ -14,7 +14,14 @@ const NewSong = () => {
     const navigate = useNavigate()
     const API = import.meta.env.VITE_BASE_URL
 
-    const addsong = () => {
+    const handleChange = (e) => {
+        setNewSong((prevState) => {
+            return {...prevState, [e.target.name]: e.target.value}
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
         fetch(`${API}/music`, {
             method: "POST",
             body: JSON.stringify(newSong),
@@ -25,17 +32,6 @@ const NewSong = () => {
         .then(res => res.json())
         .then(res => navigate("/songs"))
         .catch(err => console.error(err))
-    }
-
-    const handleChange = (e) => {
-        setNewSong((prevState) => {
-            return {...prevState, [e.target.name]: e.target.value}
-        })
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        addsong();
     }
 
     const handleCheckBox = () => {

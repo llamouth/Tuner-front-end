@@ -1,0 +1,36 @@
+.songs-container {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  .MuiTableHead-root {
+    background-color: #00796b;
+
+    .MuiTableCell-root {
+      color: white;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  }
+
+  .MuiTableBody-root {
+
+    .MuiTableRow-root {
+      &:nth-of-type(even) {
+        background-color: #e0f2f1;
+      }
+
+      &:hover {
+        background-color: #b2dfdb;
+      }
+    }
+
+    .MuiTableCell-root {
+      text-align: center;
+      padding: 10px;
+    }
+  }
+}
+  

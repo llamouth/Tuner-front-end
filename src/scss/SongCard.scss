@@ -1,0 +1,95 @@
+.card-container {
+    min-width: 275px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.card-header {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+  
+.card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 10px;
+}
+  
+.card-subtitle {
+    font-size: 18px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+  
+.card-album {
+    font-size: 16px;
+    // color: #495057;
+    margin-bottom: 15px;
+}
+  
+.card-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  
+    .btn-outlined {
+        border: 1px solid #00796b;;
+        color: #00796b;;
+        &:hover {
+            background-color: #00796b;;
+            color: #fff;
+        }
+    }
+}
+  
+.form-group {
+    margin-bottom: 15px;
+  
+    .form-label {
+      font-weight: 500;
+    }
+  
+    .form-control {
+      padding: 10px;
+      border-radius: 4px;
+    }
+}
+  
+.favorite-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+  
+.card-actions {
+    margin-top: 20px;
+}
+  
+.lyrics-section {
+    margin-top: 20px;
+    background-color: #e9ecef;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.btn-outlined {
+    border: 1px solid #00796b;;
+    color: #00796b;
+
+    &:hover {
+        background-color: #00796b;;
+        color: #fff;
+    }
+}
+  
+  
